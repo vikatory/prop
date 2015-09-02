@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<bill>
+<item order = "1" name = "慧力圆石">
+	<volume order = "1" time = "">
+		<goods order = "1" type = "入" num = "1" price = "(42,99,99)" totalprice = "(0,0,0)" custodial = "(0,0,0)" ></goods>
+	</volume>
+</item>
+</bill>
+
+

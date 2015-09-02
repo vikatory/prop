@@ -13,13 +13,123 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{501b5077-2933-43ea-9e56-184bf7d484cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{78ae64c7-2730-49bc-8d15-1a6037f42053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bill">
+      <UniqueIdentifier>{b7568f20-00da-4c0b-92cd-b0115df4550f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyxml">
+      <UniqueIdentifier>{b3ae4289-22ea-4924-bae0-88e7cef946a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="prop.cpp">
+    <ClCompile Include="common\CList.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\CommonClasses.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\CommonFuncs.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\dict.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\empty.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\QFile.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\singleton.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\str.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\sys.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="game\game.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="bill\bill.cpp">
+      <Filter>bill</Filter>
+    </ClCompile>
+    <ClCompile Include="bill\billcore.cpp">
+      <Filter>bill</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinystr.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxml.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxmlerror.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxmlparser.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\CList.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\CommonClasses.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\CommonFuncs.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\custom.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\dict.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\empty.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\QFile.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\singleton.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\str.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\sys.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="game\game.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="bill\bill.h">
+      <Filter>bill</Filter>
+    </ClInclude>
+    <ClInclude Include="bill\billcore.h">
+      <Filter>bill</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinystr.h">
+      <Filter>tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinyxml.h">
+      <Filter>tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="common\chstr.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
