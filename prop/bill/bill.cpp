@@ -2,6 +2,7 @@
 #include <boost/algorithm/string.hpp>
 #include <exception>
 #include <boost/lexical_cast.hpp>
+#include "CommonFuncs.h"
 #include <iostream>
 
 using namespace std;
@@ -47,9 +48,9 @@ string CBillApp::input()
 //  +---------+---------------+-----------+---------------------------------------------+
 //  添加物品   addItem         ai          序号 物品名
 //  +---------+---------------+-----------+---------------------------------------------+
-//  添加批次   addVoume        av          物品名 序号 时间=0(当前时间)
+//  添加批次   addVoume        av          物品序号 序号 时间=0(当前时间)
 //  +---------+---------------+-----------+---------------------------------------------+
-//  添加货单   addGoods        ag          物品名 批次号 单号 类型 数量 单价 总价 保管费
+//  添加货单   addGoods        ag          物品序号 批次号 单号 类型 数量 单价 总价 保管费
 //  +---------+---------------+-----------+---------------------------------------------+
 //  删除货单   delGoods        dg          物品名 批次号 单号
 //  +---------+---------------+-----------+---------------------------------------------+
@@ -65,6 +66,7 @@ string CBillApp::input()
 
 void CBillApp::processCmd(string cmd)
 {
+	m_Bill->correctOrder();
 	vector<string> tokens;
 	boost::split(tokens, cmd, boost::is_any_of(" "));
 	for_each(tokens.begin(), tokens.end(), [](string &s) {boost::trim(s); });
@@ -84,12 +86,34 @@ void CBillApp::processCmd(string cmd)
 		}
 		else if (sCmdName == "av")
 		{
-
+			int nItemOrdr = boost::lexical_cast<int>(tokens[0]);
+			int nVolumeOrdr = boost::lexical_cast<int>(tokens[1]);
+			CItem *pItem = m_Bill->item(nItemOrdr);
+			if (pItem != nullptr)
+			{
+				pItem->addVolume(nVolumeOrdr);
+			}
 		}
 		else if (sCmdName == "ag")
 		{
-
-
+			int nItemOrdr = boost::lexical_cast<int>(tokens[0]);
+			int nVolumeOrdr = boost::lexical_cast<int>(tokens[1]);
+			int nGoodsOrder = boost::lexical_cast<int>(tokens[2]);
+			string sGoodsType = tokens[3];
+			int nGoodsNum = boost::lexical_cast<int>(tokens[4]);
+			int nSucc = boost::lexical_cast<int>(tokens[4]);
+			string sGoodsPrice = tokens[5];
+			string sGoodsTotalPrice = tokens[6];
+			string sGoodsCustodial = tokens[7];
+			CItem *pItem = m_Bill->item(nItemOrdr);
+			if (pItem != nullptr)
+			{
+				CVolume *pVolume = pItem->volume(nVolumeOrdr);
+				if (pVolume != nullptr)
+				{
+					pVolume->addGoods(nGoodsOrder, sGoodsType, nGoodsNum, sGoodsPrice, sGoodsTotalPrice, sGoodsCustodial, TOBOOL(nSucc));
+				}
+			}
 		}
 		else if (sCmdName == "dg")
 		{
@@ -107,12 +131,17 @@ void CBillApp::processCmd(string cmd)
 		{
 			m_Bill->save();
 		}
+		else if (sCmdName == "reload")
+		{
+			m_Bill->reload();
+		}
 	}
 	catch (exception& e)
 	{
 		cout << "Standard exception: " << e.what() << endl;
 		cout << "指令解析错误" << endl;
 	}
+	m_Bill->correctOrder();
 }
 
 

@@ -14,10 +14,14 @@ public:
 	CBill();
 	~CBill();
 	bool load();
+	void reload();
 	void addItem(CItem* pItem);
 	void addItem(int nItemOrder, std::string sItemName);
 	void save();
 	TiXmlElement* tiXmlElement();
+	void correctOrder();
+	void showItems();
+	CItem* item(int nItemOrder);
 private:
 	std::vector<CItem*> m_Items;
 };
@@ -46,10 +50,10 @@ class CGoods
 {
 public:
 	CGoods();
-	CGoods(int nOrder, std::string sType, int nNum, CCoin oPrice, CCoin oTotalPrice, CCoin oCustodial);
+	CGoods(int nOrder, std::string sType, int nNum, CCoin oPrice, CCoin oTotalPrice, CCoin oCustodial, bool bSucc);
 	~CGoods();
 	TiXmlElement* tiXmlElement();
-
+	void setOrder(int nOrder);
 private:
 	int m_Order = -1;
 	std::string m_Type = "";
@@ -57,6 +61,7 @@ private:
 	CCoin m_Price;
 	CCoin m_TotalPrice;
 	CCoin m_Custodial;
+	bool m_Succ;
 	bool m_IsValid = false;
 };
 
@@ -67,8 +72,10 @@ public:
 	CVolume(int nOrder, std::string sTime);
 	~CVolume();
 	void addGoods(CGoods * pGoods);
+	void addGoods(int nOrder, std::string sType, int nNum, std::string sPrice, std::string sTotalPrice, std::string sCustodial, bool bSucc);
 	TiXmlElement* tiXmlElement();
-
+	void setOrder(int nOrder);
+	void correctOrder();
 private:
 	int m_Order = -1;
 	std::string m_Time = "";
@@ -83,8 +90,11 @@ public:
 	CItem(int nOrder, std::string sName);
 	~CItem();
 	void addVolume(CVolume* pVolume);
+	void addVolume(int nOrder);
+	CVolume* volume(int nVolumeOrder);
 	TiXmlElement* tiXmlElement();
-
+	void setOrder(int nOrder);
+	void correctOrder();
 private:
 	int m_Order = -1;
 	std::string m_Name = "";
