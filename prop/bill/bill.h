@@ -14,8 +14,8 @@ public:
 
 private:
 	void loop();
-	str input();
-	void processCmd(str cmd);
+	std::string input();
+	void processCmd(std::string cmd);
 
 	
 

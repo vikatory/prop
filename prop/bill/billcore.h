@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include "str.h"
+#include "tinyxml.h"
+#include "tinystr.h"
 
 class CItem;
 
@@ -13,7 +15,9 @@ public:
 	~CBill();
 	bool load();
 	void addItem(CItem* pItem);
-
+	void addItem(int nItemOrder, std::string sItemName);
+	void save();
+	TiXmlElement* tiXmlElement();
 private:
 	std::vector<CItem*> m_Items;
 };
@@ -27,6 +31,7 @@ public:
 	CCoin();
 	CCoin(std::string sCoin);
 	~CCoin();
+	std::string serial() const;
 
 	friend std::ostream & operator<<(std::ostream & os, const CCoin & c);
 
@@ -43,6 +48,7 @@ public:
 	CGoods();
 	CGoods(int nOrder, std::string sType, int nNum, CCoin oPrice, CCoin oTotalPrice, CCoin oCustodial);
 	~CGoods();
+	TiXmlElement* tiXmlElement();
 
 private:
 	int m_Order = -1;
@@ -61,6 +67,7 @@ public:
 	CVolume(int nOrder, std::string sTime);
 	~CVolume();
 	void addGoods(CGoods * pGoods);
+	TiXmlElement* tiXmlElement();
 
 private:
 	int m_Order = -1;
@@ -76,6 +83,7 @@ public:
 	CItem(int nOrder, std::string sName);
 	~CItem();
 	void addVolume(CVolume* pVolume);
+	TiXmlElement* tiXmlElement();
 
 private:
 	int m_Order = -1;

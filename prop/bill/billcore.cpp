@@ -1,8 +1,6 @@
 #include "billcore.h"
 #include "sys.h"
 #include "QFile.h"
-#include "tinyxml.h"
-#include "tinystr.h"
 #include <windows.h>
 //#include <atlstr.h>  //CString
 #include <sstream>
@@ -12,20 +10,6 @@
 
 using namespace std;
 
-CBill::CBill()
-{
-	load();
-}
-
-CBill::~CBill()
-{
-	for_each(m_Items.begin(), m_Items.end(), [](CItem * pItem) {delete pItem; });
-}
-
-void CBill::addItem(CItem* pItem)
-{
-	m_Items.push_back(pItem);
-}
 
 
 string UTF8ToGBK(const std::string& strUTF8)
@@ -64,6 +48,57 @@ string GBKToUTF8(const std::string& strGBK)
 }
 
 
+
+CBill::CBill()
+{
+	load();
+}
+
+CBill::~CBill()
+{
+	for_each(m_Items.begin(), m_Items.end(), [](CItem * pItem) {delete pItem; });
+}
+
+void CBill::addItem(CItem* pItem)
+{
+	m_Items.push_back(pItem);
+}
+
+void CBill::addItem(int nItemOrder, std::string sItemName)
+{
+	CItem* pItem = new CItem(nItemOrder, sItemName);
+	addItem(pItem);
+	cout << "添加物品: " << nItemOrder << " " << sItemName << endl;
+}
+
+TiXmlElement* CBill::tiXmlElement()
+{
+	TiXmlElement *pRoot = new TiXmlElement("bill");
+	for_each(m_Items.begin(), m_Items.end(), [&pRoot](CItem * pItem) {pRoot->LinkEndChild(pItem->tiXmlElement()); });
+	return pRoot;
+}
+
+
+void CBill::save()
+{
+	//纠正一下order
+	string appPath = getAppPath();
+	string sFileNmae = appPath + "tdbilldata1.xml";
+	try
+	{
+		TiXmlDocument *pDocument = new TiXmlDocument();
+		TiXmlDeclaration * pDecl = new TiXmlDeclaration("1.0", "UTF-8", "");
+		TiXmlElement *pRoot = tiXmlElement();
+		pDocument->LinkEndChild(pDecl);
+		pDocument->LinkEndChild(pRoot);
+		pDocument->SaveFile(sFileNmae.c_str());
+		delete pDocument;  // 子节点的delete在析构里
+	}
+	catch (exception& e)
+	{
+		cout << "Standard exception: " << e.what() << endl;
+	}
+}
 
 
 
@@ -183,10 +218,13 @@ CCoin::~CCoin()
 
 std::ostream & operator<<(std::ostream & os, const CCoin & c)
 {
-	//用assign
-	string serial = "(" + boost::lexical_cast<string>(c.m_Jin) + "," + boost::lexical_cast<string>(c.m_Yin) + "," + boost::lexical_cast<string>(c.m_Tong) + ")";
-	os << serial;
+	os << c.serial();
 	return os;
+}
+
+string CCoin::serial() const
+{
+	return "(" + boost::lexical_cast<string>(m_Jin) + "," + boost::lexical_cast<string>(m_Yin) + "," + boost::lexical_cast<string>(m_Tong) + ")";
 }
 
 
@@ -212,6 +250,25 @@ CGoods::~CGoods()
 	cout << "货物析构: " << m_Order << " " << m_Type << " " << m_Num << " " << m_Price << " " << m_TotalPrice << " " << m_Custodial << endl;
 }
 
+TiXmlElement* CGoods::tiXmlElement()
+{
+	TiXmlElement *pRoot = new TiXmlElement("goods");
+	pRoot->SetAttribute("order", m_Order);
+	pRoot->SetAttribute("type", m_Type.c_str());
+	pRoot->SetAttribute("num", m_Num);
+	pRoot->SetAttribute("price", m_Price.serial().c_str());
+	pRoot->SetAttribute("totalprice", m_TotalPrice.serial().c_str());
+	pRoot->SetAttribute("custodial", m_Custodial.serial().c_str());
+	return pRoot;
+}
+
+
+
+
+
+
+
+
 
 
 CVolume::CVolume()
@@ -236,6 +293,18 @@ void CVolume::addGoods(CGoods * pGoods)
 	m_Goods.push_back(pGoods);
 }
 
+TiXmlElement* CVolume::tiXmlElement()
+{
+	TiXmlElement *pRoot = new TiXmlElement("volume");
+	pRoot->SetAttribute("order", m_Order);
+	pRoot->SetAttribute("time", m_Time.c_str());
+	for_each(m_Goods.begin(), m_Goods.end(), [&pRoot](CGoods * pGoods) {pRoot->LinkEndChild(pGoods->tiXmlElement()); });
+	return pRoot;
+}
+
+
+
+
 
 CItem::CItem()
 {
@@ -258,7 +327,14 @@ void CItem::addVolume(CVolume* pVolume)
 	m_Volumes.push_back(pVolume);
 }
 
-
+TiXmlElement* CItem::tiXmlElement()
+{
+	TiXmlElement *pRoot = new TiXmlElement("item");
+	pRoot->SetAttribute("order", m_Order);
+	pRoot->SetAttribute("name", m_Name.c_str());
+	for_each(m_Volumes.begin(), m_Volumes.end(), [&pRoot](CVolume * pVolume) {pRoot->LinkEndChild(pVolume->tiXmlElement()); });
+	return pRoot;
+}
 
 
 
